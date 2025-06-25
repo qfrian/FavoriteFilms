@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10 Film Favorit Saya</title>
+    <title>Afrian's Favorite Films</title>
     <style>
         * {
             margin: 0;
@@ -452,7 +452,6 @@
     </div>
 
     <script>
-        // Fungsi untuk membuat elemen mengambang
         function createFloatingElements() {
             const container = document.querySelector('.floating-elements');
             const numElements = 15;
@@ -470,14 +469,12 @@
             }
         }
 
-        // Efek parallax sederhana
         function parallaxEffect() {
             const scrolled = window.pageYOffset;
             const backdrop = document.querySelector('.backdrop');
             backdrop.style.transform = `translateY(${scrolled * 0.3}px)`;
         }
 
-        // Fungsi untuk animasi saat scroll
         function animateOnScroll() {
             const cards = document.querySelectorAll('.movie-card');
             
@@ -492,7 +489,6 @@
             });
         }
 
-        // Efek hover yang lebih smooth
         function enhanceCardHover() {
             const cards = document.querySelectorAll('.movie-card');
             
@@ -507,7 +503,6 @@
             });
         }
 
-        // Smooth scrolling untuk link internal
         function smoothScroll() {
             const links = document.querySelectorAll('a[href^="#"]');
             
@@ -527,7 +522,6 @@
             });
         }
 
-        // Efek fade in untuk elemen saat load
         function fadeInOnLoad() {
             const elements = document.querySelectorAll('.movie-card, .social-section');
             
@@ -543,7 +537,6 @@
             });
         }
 
-        // Event listeners
         window.addEventListener('scroll', () => {
             parallaxEffect();
             animateOnScroll();
@@ -556,7 +549,6 @@
             fadeInOnLoad();
         });
 
-        // Optimasi performa scroll
         let ticking = false;
         
         function updateScroll() {
@@ -572,7 +564,6 @@
             }
         });
 
-        // Efek typing untuk judul
         function typewriterEffect() {
             const title = document.querySelector('.title');
             const text = title.textContent;
@@ -589,7 +580,6 @@
             }, 100);
         }
 
-        // Jalankan efek typing setelah delay
         setTimeout(typewriterEffect, 500);
     </script>
 </body>
