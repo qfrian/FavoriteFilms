@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Film Favorit Saya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="0.3" fill="rgba(255,255,255,0.08)"/><circle cx="40" cy="80" r="0.4" fill="rgba(255,255,255,0.06)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: #2c3e50;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #5a6c7d;
+            font-weight: 300;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .movie-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(0);
+            animation: slideInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #999;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .movie-poster::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .movie-card:hover .movie-poster::before {
+            left: 100%;
+        }
+
+        .movie-info {
+            padding: 25px;
+        }
+
+        .movie-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .movie-year {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .movie-description {
+            color: #555;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .rank-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #8e9eab, #eef2f3);
+            color: #2c3e50;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(142, 158, 171, 0.3);
+        }
+
+        .social-section {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            margin-top: 50px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .social-title {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: rgba(44, 62, 80, 0.1);
+            border-radius: 50%;
+            color: #2c3e50;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(44, 62, 80, 0.1);
+        }
+
+        .social-link:hover {
+            background: rgba(44, 62, 80, 0.2);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .social-link img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .movie-card:nth-child(1) { animation-delay: 0.1s; }
+        .movie-card:nth-child(2) { animation-delay: 0.2s; }
+        .movie-card:nth-child(3) { animation-delay: 0.3s; }
+        .movie-card:nth-child(4) { animation-delay: 0.4s; }
+        .movie-card:nth-child(5) { animation-delay: 0.5s; }
+        .movie-card:nth-child(6) { animation-delay: 0.6s; }
+        .movie-card:nth-child(7) { animation-delay: 0.7s; }
+        .movie-card:nth-child(8) { animation-delay: 0.8s; }
+        .movie-card:nth-child(9) { animation-delay: 0.9s; }
+        .movie-card:nth-child(10) { animation-delay: 1.0s; }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .social-links {
+                gap: 20px;
+            }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(44, 62, 80, 0.2);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="backdrop"></div>
+    <div class="floating-elements"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="title">Favorite Films</h1>
+            <p class="subtitle">Afrian's TOP 10 Favorite Films oat</p>
+        </header>
+
+        <div class="movies-grid">
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">1</div>
+                    <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/vCv83tLRBfcM0AaNK0oYB9kXp2v.jpg" alt="Goodfellas">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Goodfellas</h3>
+                    <p class="movie-year">1990 dir. Martin Scorsese</p>
+                    <p class="movie-description">Goodfellas adalah film kejahatan Amerika Serikat tahun 1990 yang disutradarai oleh Martin Scorsese. Ini adalah film adaptasi dari buku non-fiksi berjudul Wiseguy karya Nicholas Pileggi, yang juga turut serta menulis skenario film ini bersama dengan Scorsese. Film ini menceritakan jatuh bangunnya anggota mafia Henry Hill dan teman-temannya selama periode 1955-1980.
+                                                Scorsese awalnya ingin memberi judul film ini Wise Guy dan menunda pembuatannya; kemudian, ia dan Pileggi mengganti namanya menjadi Goodfellas. Film ini dibintangi oleh Robert De Niro, Joe Pesci, dan Ray Liotta.
+                                                Dibuat dengan anggaran sebesar $ 25 juta, Goodfellas meraup $ 46,8 juta di dalam negeri.</p>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">2</div>
+                    <img src="https://media.themoviedb.org/t/p/w500_and_h282_face/oSqBrxDe98mVUD3Aslxi4iewJdR.jpg" alt="Inception ">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Inception</h3>
+                    <p class="movie-year">2010 dir. Christopher Nolan</p>
+                    <p class="movie-description">Inception adalah film fiksi ilmiah tahun 2010 yang disutradarai oleh Christopher Nolan dan diproduseri oleh Christopher Nolan dan Emma Thomas. Naskah film ini ditulis oleh Christopher Nolan. Film ini dibintangi oleh Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy, Ken Watanabe, Cillian Murphy, Marion Cotillard, Tom Berenger dan Michael Caine.
+                                                Film Inception ditayangkan secara perdana di Odeon Leicester Square pada tanggal 8 Juli 2010 dan dirilis di Amerika Serikat dan Britania Raya pada tanggal 16 Juli 2010. Film ini mendapatkan review positif dari para kritikus.</p>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">3</div>
+                    <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/1SUIPFsfuNnAQExdbWyawXBGf4v.jpg" alt="Pulp Fiction">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Pulp Fiction</h3>
+                    <p class="movie-year">1994 dir. Quentin Tarantino</p>
+                    <p class="movie-description">Pulp Fiction adalah sebuah film kriminal tahun 1994 karya sutradara Quentin Tarantino, yang menulis naskah cerita film tersebut bersama Roger Avary. Dibintangi oleh John Travolta, Samuel L. Jackson, Uma Thurman, Bruce Willis, Tim Roth, dan Ving Rhames. Sebagai sebuah film drama kriminal dengan alur cerita yang non-linear, film tersebut terkenal karena dialog-dialognya yang kaya dan menggunakan kosakata yang unik, campuran humor dan kekerasan yang ironis, dan masuknya berbagai referensi film dan kebudayaan pop. Film ini dinominasikan untuk tujuh Piala Oscar, termasuk Film Terbaik. Tarantino dan Avary memenangi Oscar untuk kategori Best Original Screenplay.</p>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">4</div>
+                    <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/idA8m5hvOypHO3P89XhUnhBi2QG.jpg" alt="Primal Fear">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Primal Fear</h3>
+                    <p class="movie-year">1996 dir. Gregory Hoblit</p>
+                    <p class="movie-description">Primal Fear adalah sebuah film hukum seru Amerika Serikat tahun 1996 garapan Gregory Hoblit, berdasarkan pada novel tahun 1993 bernama sama karya William Diehl. Film tersebut menampilkan Richard Gere sebagai jaksa pembela Chicago yang meyakini bahwa klien putra altarnya (diperankan oleh Edward Norton dalam debut filmnya) tidak bersalaah atas pembunuhan uskup agung Katolik berpengaruh.</p>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">5</div>
+                    <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/9uddYYTNcLWpzUkl5iw1RUYhLhY.jpg" alt="Taxi Driver">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Taxi Driver</h3>
+                    <p class="movie-year">1976 dir. Martin Scorsese</p>
+                    <p class="movie-description">Taxi Driver adalah film tahun 1976 yang disutradarai Martin Scorsese dan ditulis oleh Paul Schrader. Film yang berkisah tentang sopir taksi yang merupakan tentara pasca Perang Vietnam ini dibintangi Robert De Niro, Jodie Foster, Harvey Keitel, dan Albert Brooks.
+                                                Film ini mendapat empat nominasi Academy Awards.</p>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">6</div>
+                    <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/hWrxRwnnisPE4LJdER3FmdeM39b.jpg" alt="Seven">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Seven</h3>
+                    <p class="movie-year">1995 dir. David Fincher</p>
+                    <p class="movie-description">Seven (juga ditulis sebagai Se7en) (1995) adalah sebuah film mengenai seorang pembunuh serial yang terobsesi dengan tujuh dosa pokok. Film ini disutradarai oleh David Fincher (filmnya yang kedua) dan ditulis oleh Andrew Kevin Walker yang menerima nominasi Penghargaan BAFTA.
+                                                Semboyan: "Seven deadly sins. Seven ways to die." "Tujuh dosa utama yang mematikan. Tujuh cara untuk mati."</p>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">7</div>
+                    <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/jqFjgNnxpXIXWuPsyfqmcLXRo9p.jpg" alt=Reservoir Dogs">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Reservoir Dogs</h3>
+                    <p class="movie-year">1992 dir. Quentin Tarantino</p>
+                    <p class="movie-description">Reservoir Dogs adalah film tahun 1992 debut besutan sutradara Quentin Tarantino. Salah satu pemainnya adalah Chris Penn. Karakter pada film ini antara lain: Mr. Blue, Mr. White, Mr. Orange, Mr. Brown, Mr. Pink, Mr. Blonde, Nice Guy Eddie, Joe Coban, serta Marvin Nash.</p>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">8</div>
+                    <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/hZkgoQYus5vegHoetLkCJzb17zJ.jpg" alt="Fight Club">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Fight Club</h3>
+                    <p class="movie-year">1999 dir. David Fincher</p>
+                    <p class="movie-description">Fight Club adalah film Amerika Serikat yang dirilis pada tahun 1999 yang diadaptasi dari novel yang juga berjudul Fight Club karya Chuck Palahniuk. Film ini disutradarai oleh David Fincher dan diperankan oleh Edward Norton (tokoh protagonis dalam film ini yang tanpa nama dan selaku narator). Film yang mengisahkan seorang pria yang terjebak dalam kehidupan sebagai masyarakat pekerja "kerah putih" yang terlibat klub pertarungan ilegal yang dirintis oleh penjual sabun yang bernama Tyler Durden (Brad Pitt). Mereka terjerumus dalam kisah segitiga dengan seorang wanita bernama Marla Singer (Helena Bonham Carter).</p>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">9</div>
+                    <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/47cXXEPn3ZQ29h3Yee9kDoouJcl.jpg" alt="Sinners">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Sinners</h3>
+                    <p class="movie-year">2025 dir. Ryan Coogler</p>
+                    <p class="movie-description">Sinners adalah sebuah film horor petualangan supranatural Amerika Serikat tahun 2025 yang ditulis dan disutradarai oleh Ryan Coogler dengan mengambil latar waktu 1930-an di Amerika Selatan. Film tersebut tayang perdana di bioskop Amerika Serikat pada 18 April 2025. Film tersebut menggabungkan elemen drama sejarah, musik blues, dan kisah vampir. Film tersebut dibintangi oleh Michael B. Jordan yang berperan ganda sebagai dua saudara kembar, yakni Smoke dan Stack.
+                                                Film tersebut diproduksi oleh Proximity Media yang bekerja sama dengan Warner Bross sebagai distributor. Film tersebut juga dibintangi oleh sejumlah pemeran lainnya, termasuk Ryan Coogler, Hailee Steinfeld, Jack O'Connell, Wunmi Mosaku, dan Jayme Lawson.</p>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-poster">
+                    <div class="rank-badge">10</div>
+                    <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/cQ1JvFBIYkIA7V55iESmGcj1Ymq.jpg" alt="Challengers">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">Challengers</h3>
+                    <p class="movie-year">2024 dir. Luca Guadagnino</p>
+                    <p class="movie-description">Challengers adalah film drama olahraga romantis Amerika Serikat tahun 2024 yang disutradarai oleh Luca Guadagnino dari skenario oleh Justin Kuritzkes, dan dibintangi oleh Zendaya, Josh O'Connor dan Mike Faist. Film ini berpusat pada cinta segitiga antara bintang tenis yang cedera dan menjadi pelatih (Zendaya), mantan pacarnya yang pemain tenis sirkuit rendah (O'Connor), dan suaminya yang juara tenis (Faist) selama tiga belas tahun hubungan mereka, yang berpuncak pada dalam dua pertandingan terakhir di ATP Challenger Tour.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="social-section">
+            <h2 class="social-title">Follow Afrian at</h2>
+            <div class="social-links">
+                <a href="https://instagram.com/afriansyariefs" class="social-link instagram" target="_blank" title="Instagram">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                </a>
+                <a href="https://boxd.it/7WeDB" class="social-link letterboxd" target="_blank" title="Letterboxd">
+                    <img src="https://a.ltrbxd.com/logos/letterboxd-mac-icon.png" alt="Letterboxd">
+                </a>
+                <a href="https://youtube.com/channel/@qfrian" class="social-link youtube" target="_blank" title="YouTube">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk membuat elemen mengambang
+        function createFloatingElements() {
+            const container = document.querySelector('.floating-elements');
+            const numElements = 15;
+
+            for (let i = 0; i < numElements; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                
+                // Posisi acak
+                element.style.left = Math.random() * 100 + '%';
+                element.style.animationDelay = Math.random() * 6 + 's';
+                element.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                
+                container.appendChild(element);
+            }
+        }
+
+        // Efek parallax sederhana
+        function parallaxEffect() {
+            const scrolled = window.pageYOffset;
+            const backdrop = document.querySelector('.backdrop');
+            backdrop.style.transform = `translateY(${scrolled * 0.3}px)`;
+        }
+
+        // Fungsi untuk animasi saat scroll
+        function animateOnScroll() {
+            const cards = document.querySelectorAll('.movie-card');
+            
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const cardVisible = 150;
+                
+                if (cardTop < window.innerHeight - cardVisible) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Efek hover yang lebih smooth
+        function enhanceCardHover() {
+            const cards = document.querySelectorAll('.movie-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                });
+            });
+        }
+
+        // Smooth scrolling untuk link internal
+        function smoothScroll() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Efek fade in untuk elemen saat load
+        function fadeInOnLoad() {
+            const elements = document.querySelectorAll('.movie-card, .social-section');
+            
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    element.style.transition = 'all 0.5s ease-out';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', () => {
+            parallaxEffect();
+            animateOnScroll();
+        });
+
+        window.addEventListener('load', () => {
+            createFloatingElements();
+            enhanceCardHover();
+            smoothScroll();
+            fadeInOnLoad();
+        });
+
+        // Optimasi performa scroll
+        let ticking = false;
+        
+        function updateScroll() {
+            parallaxEffect();
+            animateOnScroll();
+            ticking = false;
+        }
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateScroll);
+                ticking = true;
+            }
+        });
+
+        // Efek typing untuk judul
+        function typewriterEffect() {
+            const title = document.querySelector('.title');
+            const text = title.textContent;
+            title.textContent = '';
+            
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    title.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, 100);
+        }
+
+        // Jalankan efek typing setelah delay
+        setTimeout(typewriterEffect, 500);
+    </script>
+</body>
+</html>
